@@ -1,0 +1,8 @@
+{
+  "name": "qyu",
+  "version": "0.0.1",
+  "description": "An asynchronous job queue for Node.js",
+  "main": "index.js",
+  "author": "Mohamed Jeffal <mh.jeffal@gmail.com>",
+  "license": "MIT"
+}
