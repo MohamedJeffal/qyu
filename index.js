@@ -1,9 +1,22 @@
 // Qyu entry point
 const axios = require('axios')
-const Qyu = require('./lib')
+const qyu = require('./lib')
 
-const q = Qyu({
-    rateLimit: 5
+const q = qyu({
+    rateLimit: 5,
+    statsInterval: 1000
+})
+
+q.on('done', ({jobId, jobResult}) => {
+    console.log(`Success: ${jobId}, ${jobResult}`)
+})
+
+q.on('error', ({jobId, error}) => {
+    console.log(`Failed: ${jobId}, `, error)
+})
+
+q.on('stats', ({nbJobsPerSecond}) => {
+    console.log(`${nbJobsPerSecond} jobs/s processed`)
 })
 
 function wait(ms) {
@@ -26,19 +39,23 @@ function tata() {
     return axios.get('https://jsonplaceholder.typicode.com/comments').then(result => result.data.length)
 }
 
+async function tutu() {
+    await wait(6000)
+    return Promise.reject(new Error('This is veryyyyy bad'))
+}
+
+q.push({job: titi, priority: 3})
+q.push({job: tata})
+q.push({job: tata})
 q.start()
-q.push(titi)
-q.push(tata)
-q.push(tata)
-q.push(tata)
-q.push(toto)
+q.push({job: tata})
+q.push({job: tata})
+q.push({job: tata})
+q.push({job: tata})
 q.pause()
-q.push(tata)
-q.push(tata)
-q.push(tata)
-q.push(tata)
-q.push(tata)
-q.push(tata)
-q.push(tata)
-q.push(tata)
+q.push({job: tata})
+q.push({job: tutu})
+q.push({job: tata})
+q.push({job: toto})
 q.start()
+// q.stop()
