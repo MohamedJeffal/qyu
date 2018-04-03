@@ -15,9 +15,9 @@ q.on('error', ({jobId, error}) => {
     console.log(`Failed: ${jobId}, `, error)
 })
 
-q.on('stats', ({nbJobsPerSecond}) => {
+/*q.on('stats', ({nbJobsPerSecond}) => {
     console.log(`${nbJobsPerSecond} jobs/s processed`)
-})
+})*/
 
 function wait(ms) {
     return new Promise(resolve => {
