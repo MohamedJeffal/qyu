@@ -5,8 +5,12 @@
   "main": "index.js",
   "author": "Mohamed Jeffal <mh.jeffal@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "test": "jest"
+  },
   "devDependencies": {
     "axios": "^0.18.0",
+    "jest": "^22.4.3",
     "prettier": "^1.11.1"
   }
 }
