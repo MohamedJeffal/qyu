@@ -21,7 +21,9 @@ const q = qyu({
   })
 
   q.on('drain', () => {
-    q.stop().then(() => console.log('mwaaaahahahahahahahahaahha'))
+    // TODO: Warning on this !!!!!
+    // q.stop().then(() => console.log('mwaaaahahahahahahahahaahha'))
+    console.log('draiiiiiin')
   })
 
   function wait(ms) {
@@ -55,6 +57,7 @@ const q = qyu({
     return Promise.reject(new Error('This is veryyyyy bad'))
   }
 
+  //q.start().then(data => console.log('start: ', data))
   q.push({ job: titi, priority: 3 })
   q.push({ job: tata })
   q.push({ job: tata })
@@ -69,5 +72,9 @@ const q = qyu({
   q.push({ job: tata })
   q.push({ job: toto })
   q.start().then(data => console.log('start: ', data))
-  //q.pause().then(data => console.log('pause: ', data))
+  // TODO: give a tip on this 
+  /*q.pause().then(data => {
+    console.log('pause: ', data)
+    q.stop()
+  })*/
   // q.stop()
