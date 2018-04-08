@@ -75,6 +75,6 @@ const q = qyu({
   // TODO: give a tip on this 
   /*q.pause().then(data => {
     console.log('pause: ', data)
-    q.stop()
+    q.clear()
   })*/
   // q.stop()
