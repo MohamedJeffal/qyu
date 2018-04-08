@@ -6,7 +6,7 @@
   "author": "Mohamed Jeffal <mh.jeffal@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "jest --verbose"
   },
   "devDependencies": {
     "axios": "^0.18.0",
