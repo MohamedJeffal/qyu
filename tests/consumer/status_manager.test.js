@@ -159,3 +159,83 @@ describe('updateStatus', () => {
     statsEventIntervalFnSpy.mockRestore()
   })
 })
+
+describe('updateStatusQueue', () => {
+  const statM = new StatusManager()
+
+  afterEach(() => {
+    statM.clear()
+  })
+
+  test('A status queue currently pending pause should not be updated / consumer should not pull new jobs', () => {
+    const inputStatus = 'PAUSE'
+    const emptyFn = () => {}
+
+    const updateStatusSpy = jest.spyOn(statM, 'updateStatus')
+    const shiftCurrentStatusSpy = jest.spyOn(statM, 'shiftCurrentStatus')
+
+    statM.pushStatus(inputStatus, emptyFn, emptyFn)
+
+    expect(statM.updateStatusQueue(5)).toBe(false)
+    expect(statM.queue[0].done).toBe(false)
+
+    expect(updateStatusSpy).not.toHaveBeenCalled()
+    expect(shiftCurrentStatusSpy).not.toHaveBeenCalled()
+
+    updateStatusSpy.mockReset()
+    updateStatusSpy.mockRestore()
+    shiftCurrentStatusSpy.mockReset()
+    shiftCurrentStatusSpy.mockRestore()
+  })
+
+  test('A status queue currently paused without a next status available should not be shifted / consumer should not pull new jobs', () => {
+    const inputStatus = 'PAUSE'
+    const emptyFn = () => {}
+
+    const updateStatusSpy = jest.spyOn(statM, 'updateStatus')
+    const shiftCurrentStatusSpy = jest.spyOn(statM, 'shiftCurrentStatus')
+
+    statM.pushStatus(inputStatus, emptyFn, emptyFn)
+
+    expect(statM.updateStatusQueue(0)).toBe(false)
+    expect(statM.queue[0].done).toBe(true)
+
+    expect(updateStatusSpy).toHaveBeenCalled()
+    expect(shiftCurrentStatusSpy).toHaveBeenCalled()
+
+    updateStatusSpy.mockReset()
+    updateStatusSpy.mockRestore()
+    shiftCurrentStatusSpy.mockReset()
+    shiftCurrentStatusSpy.mockRestore()
+  })
+
+  test('A status queue currently paused with a next status available should be shifted / consumer should pull new jobs', () => {
+    const inputStatuses = ['PAUSE', 'START']
+    const emptyFn = () => {}
+
+    const updateStatusSpy = jest.spyOn(statM, 'updateStatus')
+    const shiftCurrentStatusSpy = jest.spyOn(statM, 'shiftCurrentStatus')
+
+    for (const statusKind of inputStatuses) {
+      statM.pushStatus(statusKind, emptyFn, emptyFn)
+    }
+
+    expect(statM.updateStatusQueue(0)).toBe(true)
+    expect(statM.queue).toEqual([
+      {
+        kind: 'START',
+        resolver: emptyFn,
+        done: false,
+        updateStatsEventInterval: emptyFn
+      }
+    ])
+
+    expect(updateStatusSpy).toHaveBeenCalled()
+    expect(shiftCurrentStatusSpy).toHaveBeenCalled()
+
+    updateStatusSpy.mockReset()
+    updateStatusSpy.mockRestore()
+    shiftCurrentStatusSpy.mockReset()
+    shiftCurrentStatusSpy.mockRestore()
+  })
+})
